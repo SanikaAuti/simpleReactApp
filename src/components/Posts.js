@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPosts } from '../api';
-import { Container, Grid, Card, CardContent, Typography, TextField } from '@mui/material';
+import { Container, TextField, List, ListItem, ListItemText, Typography, Divider } from '@mui/material';
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -19,8 +19,8 @@ const Posts = () => {
   };
 
   const filteredPosts = posts.filter(post =>
-    post.weather.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.base.toLowerCase().includes(searchTerm.toLowerCase())
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.body.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -33,22 +33,29 @@ const Posts = () => {
         value={searchTerm}
         onChange={handleSearchChange}
       />
-      <Grid container spacing={3}>
+      <List>
         {filteredPosts.map(post => (
-          <Grid item xs={12} sm={6} md={4} key={post.id}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  {post.weather}
-                </Typography>
-                <Typography variant="body2">
-                  {post.base}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          <div key={post.id}>
+            <ListItem alignItems="flex-start">
+              <ListItemText
+                primary={post.title}
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      color="textPrimary"
+                    >
+                      {post.body}
+                    </Typography>
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+            <Divider component="li" />
+          </div>
         ))}
-      </Grid>
+      </List>
     </Container>
   );
 };
